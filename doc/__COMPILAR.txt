@@ -1,0 +1,4 @@
+Adicionar no linker esta linha pra gerar o arquivo .map de funções pra fazer um debug massa:
+
+-Wl,-Map=forgottenserver.map
+
