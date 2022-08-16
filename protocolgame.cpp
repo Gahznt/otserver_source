@@ -1055,9 +1055,9 @@ bool ProtocolGame::canSee(uint16_t x, uint16_t y, uint16_t z) const
 		return false;
 
 	//negative offset means that the action taken place is on a lower floor than ourself
-	int32_t offsetz = myPos.z - z;
-	return ((x >= myPos.x - 8 + offsetz) && (x <= myPos.x + 9 + offsetz) &&
-		(y >= myPos.y - 6 + offsetz) && (y <= myPos.y + 7 + offsetz));
+    int32_t offsetz = myPos.z - z;
+    return ((x >= myPos.x - Map::maxClientViewportX + offsetz) && (x <= myPos.x + (Map::maxClientViewportX+1) + offsetz) &&
+     (y >= myPos.y - Map::maxClientViewportY + offsetz) && (y <= myPos.y + (Map::maxClientViewportY+1) + offsetz));
 }
 
 //********************** Parse methods *******************************//
@@ -2342,29 +2342,29 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 					MoveUpCreature(msg, creature, newPos, oldPos, oldStackpos);
 
 				if(oldPos.y > newPos.y) // north, for old x
-				{
-					msg->AddByte(0x65);
-					GetMapDescription(oldPos.x - 8, newPos.y - 6, newPos.z, 18, 1, msg);
-				}
-				else if(oldPos.y < newPos.y) // south, for old x
-				{
-					msg->AddByte(0x67);
-					GetMapDescription(oldPos.x - 8, newPos.y + 7, newPos.z, 18, 1, msg);
-				}
+                {
+                    msg->AddByte(0x65);
+                    GetMapDescription(oldPos.x - Map::maxClientViewportX, newPos.y - Map::maxClientViewportY, newPos.z, (Map::maxClientViewportX+1)*2, 1, msg);
+                }
+                else if(oldPos.y < newPos.y) // south, for old x
+                {
+                    msg->AddByte(0x67);
+                    GetMapDescription(oldPos.x - Map::maxClientViewportX, newPos.y + (Map::maxClientViewportY+1), newPos.z, (Map::maxClientViewportX+1)*2, 1, msg);
+                }
 
-				if(oldPos.x < newPos.x) // east, [with new y]
-				{
-					msg->AddByte(0x66);
-					GetMapDescription(newPos.x + 9, newPos.y - 6, newPos.z, 1, 14, msg);
-				}
-				else if(oldPos.x > newPos.x) // west, [with new y]
-				{
-					msg->AddByte(0x68);
-					GetMapDescription(newPos.x - 8, newPos.y - 6, newPos.z, 1, 14, msg);
-				}
-			}
-		}
-	}
+                if(oldPos.x < newPos.x) // east, [with new y]
+                {
+                    msg->AddByte(0x66);
+                    GetMapDescription(newPos.x + (Map::maxClientViewportX+1), newPos.y - Map::maxClientViewportY, newPos.z, 1, (Map::maxClientViewportY+1)*2, msg);
+                }
+                else if(oldPos.x > newPos.x) // west, [with new y]
+                {
+                    msg->AddByte(0x68);
+                    GetMapDescription(newPos.x - Map::maxClientViewportX, newPos.y - Map::maxClientViewportY, newPos.z, 1, (Map::maxClientViewportY+1)*2, msg);
+                }
+            }
+        }
+    }
 	else if(canSee(oldPos) && canSee(newPos))
 	{
 		if(!player->canSeeCreature(creature))
@@ -2665,7 +2665,7 @@ void ProtocolGame::AddMapDescription(NetworkMessage_ptr msg, const Position& pos
 {
 	msg->AddByte(0x64);
 	msg->AddPosition(player->getPosition());
-	GetMapDescription(pos.x - 8, pos.y - 6, pos.z, 18, 14, msg);
+	GetMapDescription(pos.x - Map::maxClientViewportX, pos.y - Map::maxClientViewportY, pos.z, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, msg);
 }
 
 void ProtocolGame::AddTextMessage(NetworkMessage_ptr msg, MessageClasses mclass, const std::string& message)
@@ -2990,14 +2990,14 @@ void ProtocolGame::MoveUpCreature(NetworkMessage_ptr msg, const Creature* creatu
 	msg->AddByte(0xBE); //floor change up
 	if(newPos.z == 7) //going to surface
 	{
-		int32_t skip = -1;
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 5, 18, 14, 3, skip); //(floor 7 and 6 already set)
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 4, 18, 14, 4, skip);
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 3, 18, 14, 5, skip);
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 2, 18, 14, 6, skip);
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 1, 18, 14, 7, skip);
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, 0, 18, 14, 8, skip);
-		if(skip >= 0)
+int32_t skip = -1;
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 5, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, 3, skip); //(floor 7 and 6 already set)
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 4, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, 4, skip);
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 3, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, 5, skip);
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 2, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, 6, skip);
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 1, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, 7, skip);
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, 0, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, 8, skip);
+        if(skip >= 0)
 		{
 			msg->AddByte(skip);
 			msg->AddByte(0xFF);
@@ -3006,8 +3006,8 @@ void ProtocolGame::MoveUpCreature(NetworkMessage_ptr msg, const Creature* creatu
 	else if(newPos.z > 7) //underground, going one floor up (still underground)
 	{
 		int32_t skip = -1;
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, oldPos.z - 3, 18, 14, 3, skip);
-		if(skip >= 0)
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, oldPos.z - 3, (Map::maxClientViewportX+1), (Map::maxClientViewportY+1)*2, 3, skip);
+        if(skip >= 0)
 		{
 			msg->AddByte(skip);
 			msg->AddByte(0xFF);
@@ -3015,13 +3015,13 @@ void ProtocolGame::MoveUpCreature(NetworkMessage_ptr msg, const Creature* creatu
 	}
 
 	//moving up a floor up makes us out of sync
-	//west
-	msg->AddByte(0x68);
-	GetMapDescription(oldPos.x - 8, oldPos.y + 1 - 6, newPos.z, 1, 14, msg);
+    //west
+    msg->AddByte(0x68);
+    GetMapDescription(oldPos.x - Map::maxClientViewportX, oldPos.y - (Map::maxClientViewportY-1), newPos.z, 1, (Map::maxClientViewportY+1)*2, msg);
 
-	//north
-	msg->AddByte(0x65);
-	GetMapDescription(oldPos.x - 8, oldPos.y - 6, newPos.z, 18, 1, msg);
+    //north
+    msg->AddByte(0x65);
+    GetMapDescription(oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z, (Map::maxClientViewportX+1)*2, 1, msg);
 }
 
 void ProtocolGame::MoveDownCreature(NetworkMessage_ptr msg, const Creature* creature,
@@ -3034,10 +3034,10 @@ void ProtocolGame::MoveDownCreature(NetworkMessage_ptr msg, const Creature* crea
 	if(newPos.z == 8) //going from surface to underground
 	{
 		int32_t skip = -1;
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z, 18, 14, -1, skip);
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z + 1, 18, 14, -2, skip);
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z + 2, 18, 14, -3, skip);
-		if(skip >= 0)
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, -1, skip);
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + 1, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, -2, skip);
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + 2, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, -3, skip);
+        if(skip >= 0)
 		{
 			msg->AddByte(skip);
 			msg->AddByte(0xFF);
@@ -3046,8 +3046,8 @@ void ProtocolGame::MoveDownCreature(NetworkMessage_ptr msg, const Creature* crea
 	else if(newPos.z > oldPos.z && newPos.z > 8 && newPos.z < 14) //going further down
 	{
 		int32_t skip = -1;
-		GetFloorDescription(msg, oldPos.x - 8, oldPos.y - 6, newPos.z + 2, 18, 14, -3, skip);
-		if(skip >= 0)
+        GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + 2, (Map::maxClientViewportX+1)*2, (Map::maxClientViewportY+1)*2, -3, skip);
+        if(skip >= 0)
 		{
 			msg->AddByte(skip);
 			msg->AddByte(0xFF);

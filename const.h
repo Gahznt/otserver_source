@@ -566,7 +566,7 @@ enum Icons_t
 	ICON_BUFF           = 1 << 12,
 	ICON_PZ             = 1 << 13,
 	ICON_PROTECTIONZONE = 1 << 14,
-	ICON_BLEEDING       = 1 << 15, // A partir daqui é custom WOP
+	ICON_BLEEDING       = 1 << 15, // A partir daqui ï¿½ custom WOP
 	ICON_HUNGRY         = 1 << 16, // Com fome nhm nhm
 	ICON_FAST_ATTACK    = 1 << 17,
 };
@@ -783,7 +783,7 @@ enum PlayerCustomFlags
 #define PSTRG_OUTFITSID_RANGE_START	(PSTRG_RESERVED_RANGE_START + 1500)
 #define PSTRG_OUTFITSID_RANGE_SIZE	500
 
-#define NETWORKMESSAGE_MAXSIZE 15360
+#define NETWORKMESSAGE_MAXSIZE 177777
 #define IPBAN_FLAG 128
 #define LOCALHOST 2130706433
 
