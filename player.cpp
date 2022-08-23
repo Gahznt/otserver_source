@@ -1758,7 +1758,7 @@ void Player::onWalk(Direction& dir)
 	Creature::onWalk(dir);
 	setNextActionTask(NULL);
 	if(g_config.getBool(ConfigManager::POTION_EXAUSTION)) {
-		setNextAction(OTSYS_TIME() + getStepDuration(dir, true));
+
 	}
 }
 
@@ -3588,7 +3588,7 @@ void Player::doAttacking(uint32_t interval)
 			SchedulerTask* task = createSchedulerTask(getNextActionTime(), boost::bind(&Game::checkCreatureAttack, &g_game, getID()));
 			setNextActionTask(task);
 		}
-		else if((!weapon->hasExhaustion() || !hasCondition(CONDITION_EXHAUST, EXHAUST_COMBAT)) && weapon->useWeapon(this, getWeapon(), attackedCreature))
+		else if(!weapon->hasExhaustion() && weapon->useWeapon(this, tool, attackedCreature))
 			lastAttack = OTSYS_TIME();
 	}
 	// <onepiece>
