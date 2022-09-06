@@ -581,8 +581,8 @@ class Game
 		void addCreatureHealth(const SpectatorVec& list, const Creature* target);
 		void addAnimatedText(const Position& pos, uint8_t textColor, const std::string& text);
 		void addAnimatedText(const SpectatorVec& list, const Position& pos, uint8_t textColor, const std::string& text);
-		void addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode = false);
-		void addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect, bool ghostMode = false);
+		void addMagicEffect(const Position& pos, uint16_t effect, bool ghostMode = false);
+		void addMagicEffect(const SpectatorVec& list, const Position& pos, uint16_t effect, bool ghostMode = false);
 		void addDistanceEffect(const SpectatorVec& list, const Position& fromPos, const Position& toPos, uint8_t effect);
 		void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 

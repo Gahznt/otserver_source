@@ -2111,7 +2111,7 @@ void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, u
 	}
 }
 
-void ProtocolGame::sendMagicEffect(const Position& pos, uint8_t type)
+void ProtocolGame::sendMagicEffect(const Position& pos, uint16_t type)
 {
 	if(type > MAGIC_EFFECT_LAST || !canSee(pos))
 		return;
@@ -2684,11 +2684,11 @@ void ProtocolGame::AddAnimatedText(NetworkMessage_ptr msg, const Position& pos,
 	msg->AddString(text);
 }
 
-void ProtocolGame::AddMagicEffect(NetworkMessage_ptr msg,const Position& pos, uint8_t type)
+void ProtocolGame::AddMagicEffect(NetworkMessage_ptr msg,const Position& pos, uint16_t type)
 {
 	msg->AddByte(0x83);
 	msg->AddPosition(pos);
-	msg->AddByte(type + 1);
+	msg->AddU16(type + 1);
 }
 
 void ProtocolGame::AddDistanceShoot(NetworkMessage_ptr msg, const Position& from, const Position& to,

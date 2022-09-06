@@ -1115,7 +1115,7 @@ MagicEffectNames magicEffectNames[] =
 	{"e252",		MAGIC_EFFECT_E252},
 	{"e253",		MAGIC_EFFECT_E253},
 	{"e254",		MAGIC_EFFECT_E254},
-	
+	{"semfim",        MAGIC_EFFECT_SEMFIM}
 	
 	
 };

@@ -277,9 +277,10 @@ enum MagicEffect_t
     MAGIC_EFFECT_E252   	= 0xFD, //223
     MAGIC_EFFECT_E253   	= 0xFE, //223
     MAGIC_EFFECT_E254   	= 0xFF, //223
+	MAGIC_EFFECT_SEMFIM        = 0xFFFE, //65534
 	
 	
-	MAGIC_EFFECT_LAST		= MAGIC_EFFECT_E254,
+	MAGIC_EFFECT_LAST		= MAGIC_EFFECT_SEMFIM,
 
 	//for internal use, dont send to client
 	MAGIC_EFFECT_NONE		= 0xFF,

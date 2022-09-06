@@ -4307,7 +4307,7 @@ bool Game::combatChangeHealth(CombatType_t combatType, Creature* attacker, Creat
 	MagicEffect_t hitEffect/* = MAGIC_EFFECT_UNKNOWN*/, TextColor_t hitColor/* = TEXTCOLOR_UNKNOWN*/, bool force/* = false*/)
 {
     // <onepiece>
-      // Evitar que criaturas causem dano umas às outras
+      // Evitar que criaturas causem dano umas ï¿½s outras
       if (attacker && ! attacker->getPlayer() && ! attacker->getPlayerMaster()
       &&  target   && ! target->getPlayer()   && ! target->getPlayerMaster())
       {
@@ -4637,7 +4637,7 @@ void Game::addAnimatedText(const SpectatorVec& list, const Position& pos, uint8_
 	}
 }
 
-void Game::addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode /* = false */)
+void Game::addMagicEffect(const Position& pos, uint16_t effect, bool ghostMode/* = false*/)
 {
 	if(ghostMode)
 		return;
@@ -4646,7 +4646,7 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect, bool ghostMode /*
 	addMagicEffect(list, pos, effect);
 }
 
-void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint8_t effect, bool ghostMode/* = false*/)
+void Game::addMagicEffect(const SpectatorVec& list, const Position& pos, uint16_t effect, bool ghostMode/* = false*/)
 {
 	if(ghostMode)
 		return;
